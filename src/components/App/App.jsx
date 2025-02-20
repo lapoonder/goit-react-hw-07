@@ -1,11 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchContacts } from "../../redux/contactsOps.js";
 import ContactForm from "../ContactForm/ContactForm.jsx";
 import SearchBox from "../SearchBox/SearchBox.jsx";
 import ContactList from "../ContactList/ContactList.jsx";
+import ErrorMessage from "../ErrorMessage/ErrorMessage.jsx";
+import { List } from "react-content-loader";
 import clsx from "clsx";
 import css from "./App.module.css";
+import { contactsSlice } from "../../redux/selectors.js";
+
+const MyListLoader = () => <List />;
 
 function App() {
+    const dispatch = useDispatch();
+    const { items, isLoading, error } = useSelector(contactsSlice);
+
+    useEffect(() => {
+        dispatch(fetchContacts());
+    }, [dispatch]);
+
     return (
         <>
             <header className="header">
@@ -18,8 +32,10 @@ function App() {
                     <ContactForm />
                 </div>
             </div>
-            <SearchBox />
-            <ContactList />
+            {items.length > 0 && <SearchBox />}
+            {isLoading && <MyListLoader />}
+            {error && <ErrorMessage />}
+            {items.length > 0 && <ContactList />}
         </>
     );
 }

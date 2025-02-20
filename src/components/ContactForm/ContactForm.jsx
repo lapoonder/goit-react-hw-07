@@ -3,9 +3,8 @@ import clsx from "clsx";
 import css from "./ContactForm.module.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { nanoid } from "nanoid";
 import { useId } from "react";
-import { addContact } from "../../redux/contactsSlice.js";
+import { addContact } from "../../redux/contactsOps.js";
 import { useDispatch } from "react-redux";
 
 const ContactFormSchema = Yup.object().shape({
@@ -15,8 +14,8 @@ const ContactFormSchema = Yup.object().shape({
         .required("Required"),
     number: Yup.string()
         .matches(
-            /^\d{3}-\d{2}-\d{2}$/,
-            "Phone number is not valid. Format requared: 123-68-90"
+            /^\d{3}-\d{3}-\d{4}$/,
+            "Phone number is not valid. Format requared: 123-682-9087"
         )
         .required("Required"),
 });
@@ -32,7 +31,7 @@ function ContactForm() {
     const numberFieldId = useId();
 
     const handleSubmit = (values, actions) => {
-        values.id = nanoid();
+        console.log(values);
         dispatch(addContact(values));
         actions.resetForm();
     };
@@ -52,7 +51,12 @@ function ContactForm() {
 
                 <div className={clsx(css.fieldForm)}>
                     <label htmlFor={numberFieldId}>Number:</label>
-                    <Field type="tel" name="number" id={numberFieldId} />
+                    <Field
+                        type="tel"
+                        name="number"
+                        id={numberFieldId}
+                        placeholder="555-666-7777"
+                    />
                     <ErrorMessage name="number" component="span" />
                 </div>
 

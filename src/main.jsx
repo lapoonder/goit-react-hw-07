@@ -5,17 +5,14 @@ import "modern-normalize";
 import "./index.css";
 import App from "./components/App/App.jsx";
 import { Provider } from "react-redux";
-import { store, persistor } from "./redux/store";
-import { PersistGate } from "redux-persist/integration/react";
+import { store } from "./redux/store";
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
     ReactDOM.createRoot(rootElement).render(
         <StrictMode>
             <Provider store={store}>
-                <PersistGate loading={null} persistor={persistor}>
-                    <App />
-                </PersistGate>
+                <App />
             </Provider>
         </StrictMode>
     );
